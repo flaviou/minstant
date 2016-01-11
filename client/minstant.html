@@ -32,7 +32,11 @@
 
 <!-- Top level template for the lobby page -->
 <template name="lobby_page">
+  {{#if currentUser}}
 	{{> available_user_list}}
+  {{else}}
+    <h3>Please sign in to chat.</h3>
+  {{/if}}
 </template>
 
 <!-- display a list of users -->
@@ -68,6 +72,7 @@
 
 <!-- Top level template for the chat page -->
 <template name="chat_page">
+  {{#if currentUser}}
 	<h2>Type in the box below to send a message!</h2>
 	<div class="row">
 		<div class="col-md-12">
@@ -82,15 +87,34 @@
 		<div class="col-md-12">
 			<form class="js-send-chat">
 			<input class="input" type="text" name="chat" placeholder="type a message here...">
-			<button class="btn btn-default">send</button>
+			<button class="btn btn-default">Send</button>
+                        <br/>
+                        <a href="#" class="js-emoticon">
+                          <img src="/emoticon1.jpg" class="emoticon_img">
+                        </a>
+                        <a href="#" class="js-emoticon">
+                          <img src="/emoticon2.jpg" class="emoticon_img">
+                        </a>
+                        <a href="#" class="js-emoticon">
+                          <img src="/emoticon3.jpg" class="emoticon_img">
+                        </a>
+                        <a href="#" class="js-emoticon">
+                          <img src="/emoticon4.jpg" class="emoticon_img">
+                        </a>
+                        <a href="#" class="js-emoticon">
+                          <img src="/emoticon5.jpg" class="emoticon_img">
+                        </a>
 		</form>
 		</div>
 	</div>
+  {{else}}
+    <h3>Please sign in to chat.</h3>
+  {{/if}}
 </template>
 
 <!-- simple template that displays a message -->
 <template name="chat_message">
-	<img src="/{{getAvatar author}}" class="avatar_img">: {{text}}
+	<img src="/{{getAvatar author}}" class="avatar_img">: {{{getMessage}}}
 	<br>
 </template>
 

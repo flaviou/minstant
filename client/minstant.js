@@ -41,9 +41,9 @@
     // to which we'll add the message
     var chat = Chats.findOne({_id:Session.get("chatId")});
     if (chat){// ok - we have a chat to use
-      var msgs = chat.messages; // pull the messages property
-      if (!msgs){// no messages yet, create a new array
-        msgs = [];
+      var msgs = [];
+      if (chat.messages) {
+        msgs = chat.messages; // pull the messages property
       }
       // is a good idea to insert data straight from the form
       // (i.e. the user) into the database?? certainly not. 
@@ -56,8 +56,26 @@
       // update the chat object in the database.
       Meteor.call('updateChat', chat._id, chat);
     }
-  }
+  },
+  'click .js-emoticon': function(event, template){
+    var chat = Chats.findOne({_id:Session.get("chatId")});
+    if (chat){// ok - we have a chat to use
+      var msgs = [];
+      if (chat.messages) {
+        msgs = chat.messages; // pull the messages property
+      }
+      // is a good idea to insert data straight from the form
+      // (i.e. the user) into the database?? certainly not. 
+      // push adds the message to the end of the array
+      msgs.push({image: event.target.src, author:Meteor.userId()});
+      // put the messages array onto the chat object
+      chat.messages = msgs;
+      // update the chat object in the database.
+      Meteor.call('updateChat', chat._id, chat);
+    }
+   }
  })
+
 
  Template.chat_message.helpers({
    getAvatar: function(_id) {
@@ -67,5 +85,13 @@
       } else {
         return '';
       }
+   },
+   getMessage: function() {
+     if (this.text) {
+       return this.text;
+     }
+     if (this.image) {
+       return '<img src="' + this.image + '" class="emoticon_img">';
+     }
    }
  })
